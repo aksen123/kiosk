@@ -1,21 +1,17 @@
 "use client";
 
 import { foodsApi } from "@/service/foods-api";
-import { Food } from "@/types/serivce";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import useSWR from "swr";
 
 export default function Home() {
-  const [foods, setFoods] = useState<Food[]>([]);
+  const { data: foods = [], isLoading } = useSWR("/api/foods", () =>
+    foodsApi.list()
+  );
 
-  const getFoods = async () => {
-    const data = await foodsApi.list();
-    setFoods(data);
-  };
-
-  useEffect(() => {
-    getFoods();
-  }, []);
+  if (isLoading) {
+    return <div>데이터를 받아오는 중입니다.</div>;
+  }
 
   return (
     <main>
