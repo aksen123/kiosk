@@ -1,3 +1,5 @@
+"use client";
+
 import { foodApi } from "@/service/foodApi";
 import useSWR from "swr";
 
@@ -8,7 +10,7 @@ interface Props {
 }
 
 export default function Food({ params: { id } }: Props) {
-  const data = useSWR(`/api/food/${id}`, () => foodApi.get());
+  const data = useSWR(`/api/food/${id}`, () => foodApi.get(id));
 
   return (
     <div>

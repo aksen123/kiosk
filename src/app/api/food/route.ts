@@ -1,8 +1,9 @@
 import { foods } from "@/dummy/foods";
-import { NextApiRequest } from "next";
+import { NextRequest } from "next/server";
 
-export async function GET(request: NextApiRequest) {
-  const { id } = request.query;
+export async function GET(request: NextRequest) {
+  const { searchParams } = request.nextUrl;
+  const id = searchParams.get("id");
 
   return Response.json({
     success: true,
