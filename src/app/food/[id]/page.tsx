@@ -5,13 +5,13 @@ import useSWR from "swr";
 
 interface Props {
   params: {
-    id: number;
+    id: string;
   };
 }
 
 export default function Food({ params: { id } }: Props) {
-  const data = useSWR(`/api/food/${id}`, () => foodApi.get(id));
-
+  const {data} = useSWR(`/api/food/${id}`, () => foodApi.get(id));
+  console.log(data)
   return (
     <div>
       food {id}
