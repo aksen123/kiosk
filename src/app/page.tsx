@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 import useSWR from "swr";
+import Cart from "./Components/Cart";
 
 export default function Home() {
   const { push } = useRouter();
@@ -20,6 +21,7 @@ export default function Home() {
 
   return (
     <main>
+      <Cart />
       <section className="grid grid-cols-2 gap-[1rem] w-full p-[3rem]">
         {foods.map(({ id, src, name, price }) => (
           <article
@@ -41,6 +43,7 @@ export default function Home() {
           </article>
         ))}
       </section>
+      
     </main>
   );
 }
