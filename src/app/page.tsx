@@ -12,7 +12,7 @@ export default function Home() {
     foodApi.list()
   );
 
-  const handleFoodDetail = useCallback((id: number) => push(`/food/${id}`), []);
+  const handleFoodDetail = useCallback((id: string) => push(`/food/${id}`), []);
 
   if (isLoading) {
     return <div>데이터를 받아오는 중입니다.</div>;
