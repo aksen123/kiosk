@@ -2,6 +2,9 @@
 import React from 'react'
 import { cartState } from '../atoms/cart-atom'
 import { useRecoilState } from 'recoil'
+import { foodApi } from '@/service/foodApi'
+import api from '@/service/axios'
+
 const Cart = () => {
   
   const [cartList, setCartList] = useRecoilState(cartState)
@@ -19,6 +22,10 @@ const Cart = () => {
           </div>
         ))
         }
+        <button onClick={()=>{
+          console.log(cartList)
+          foodApi.order(cartList)
+        }}>주문하기</button>
       </div>
     )
   }

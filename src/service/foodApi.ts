@@ -8,4 +8,7 @@ export const foodApi = {
   list: (): Promise<Food[]> => {
     return api.get("/api/foods");
   },
+  order: (food: Food[]) =>{
+    return api.post("/api/order", food);
+  }
 };
