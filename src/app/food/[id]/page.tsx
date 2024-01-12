@@ -25,7 +25,16 @@ export default function FoodPage({ params: { id } }: Props) {
   const handleCount = (num : number) =>{
     count + num < 0 ? false : setCount(count => count + num)
   }
-
+  const order = () => {
+    const menu = {...data as Food, count: count}
+    if(count > 0) {
+      foodApi.order([menu]) 
+      push('/')
+    } else {
+      alert('수량을 선택해 주세요');
+    }
+    
+  }
   const addCart = () => {
     let arr = [...cartList]
     let index = arr.findIndex((el) => el.name == data?.name);
@@ -62,7 +71,7 @@ export default function FoodPage({ params: { id } }: Props) {
         <button onClick={()=>{handleCount(-1)}} className="border-l border-black w-8">-</button>
       </div>
       <div className="mt-4">
-        <button className="mr-2 p-3 bg-blue-600 rounded-3xl text-white">주문하기</button>
+        <button onClick={order} className="mr-2 p-3 bg-blue-600 rounded-3xl text-white">주문하기</button>
         <button onClick={addCart} className="p-3 bg-blue-600 rounded-3xl text-white">장바구니 추가</button>
       </div>
     </div>
