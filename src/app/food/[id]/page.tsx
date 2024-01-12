@@ -5,6 +5,7 @@ import useSWR from "swr";
 import Image from "next/image";
 import { useState } from "react";
 import { cartState } from "@/app/atoms/cart-atom";
+import { orderListState } from "@/app/atoms/orderList-atom";
 import { useRecoilState } from "recoil";
 import { Food } from "@/types/serivce";
 import { useRouter } from "next/navigation";
@@ -19,6 +20,8 @@ export default function FoodPage({ params: { id } }: Props) {
   const { data, isLoading } = useSWR(`/api/food/${id}`, () => foodApi.get(id));
   const [count, setCount] = useState(0)
   const  [cartList, setCartList] = useRecoilState(cartState)
+  const [orderList, setOrderList] = useRecoilState(orderListState)
+
   const {push} = useRouter()
 
 
@@ -29,6 +32,7 @@ export default function FoodPage({ params: { id } }: Props) {
     const menu = {...data as Food, count: count}
     if(count > 0) {
       foodApi.order([menu]) 
+      setOrderList([...orderList,[menu]])
       push('/')
     } else {
       alert('수량을 선택해 주세요');

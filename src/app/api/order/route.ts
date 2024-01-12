@@ -31,5 +31,5 @@ export async function POST(req: NextRequest) {
   //  await addDoc(collection(db,'orders'),{name,price,count})
   //   })
 
-  return Response.json({ success: true });
+  return Response.json({ success: true});
 }
