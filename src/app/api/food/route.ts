@@ -8,7 +8,6 @@ export async function GET(request: NextRequest) {
 
   const food = await getDoc(doc(db,'foods', String(id)))
   const data = food.exists() ? {...food.data(),count: 0} : null
-  console.log(data)
   return Response.json({
     success: true,
     data: data,
