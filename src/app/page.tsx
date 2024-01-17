@@ -7,6 +7,9 @@ import { foodApi } from "@/service/foodApi";
 import useSWR from "swr";
 import Cart from "./Components/Cart";
 import OrderList from "./Components/OrderList";
+import Payment from "./Components/Payment";
+import { paymentState } from "./atoms/payment-atom";
+import { useRecoilState } from "recoil";
 export default function Home() {
   const { push } = useRouter();
   const { data: foods = [], isLoading } = useSWR("/api/foods", () =>
@@ -14,7 +17,7 @@ export default function Home() {
   );
   const [cartDisplay, setCartDisplay] = useState(false);
   const [orderDisplay, setOrderDisplay] = useState(false);
-
+  const [displayPayment, setDisplayPayment] = useRecoilState(paymentState);
   const handleFoodDetail = useCallback((id: string) => push(`/food/${id}`), []);
 
   if (isLoading) {
@@ -23,6 +26,7 @@ export default function Home() {
 
   return (
     <main>
+      {displayPayment && <Payment />}
       <section className="w-full flex items-center justify-center p-4">
         <article className="w-1/2 text-center">
           <button

@@ -1,20 +1,12 @@
 import db from "@/service/firebase";
-import { Food } from "@/types/serivce";
+import { Food, Order, OrderList } from "@/types/serivce";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { NextRequest } from "next/server";
 
-interface Data {
+export interface Data {
   orders: Order[];
 }
-export interface Order {
-  date: number;
-  order: string;
-}
-export interface OrderList {
-  name: string;
-  price: number;
-  count: number;
-}
+
 export async function POST(req: NextRequest) {
   const foods: Food[] = await req.json();
   setOrders(foods);
@@ -26,7 +18,6 @@ export async function GET(req: NextRequest) {
   const docRef = doc(db, "orders", docId);
   const list = await getDoc(docRef);
   const data = list.exists() ? list.data().orders : [];
-  console.log(data);
   return Response.json({ success: true, data });
 }
 
