@@ -1,35 +1,60 @@
-import { NextRequest } from "next/server";
-import { doc, setDoc, addDoc, collection, getDocs } from "firebase/firestore";
 import db from "@/service/firebase";
 import { Food } from "@/types/serivce";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { NextRequest } from "next/server";
 
-interface order {
-  displayNo : number
-  order : string
-  orderNo : number
+interface Data {
+  orders: Order[];
 }
-
+export interface Order {
+  date: number;
+  order: string;
+}
+export interface OrderList {
+  name: string;
+  price: number;
+  count: number;
+}
 export async function POST(req: NextRequest) {
-  const test = await getDocs(collection(db,'orders'))
   const foods: Food[] = await req.json();
-  const docId = new Date().getTime();
-  const todayTime = new Date().setHours(0,0,0,0)
-  let orders = test.docs.map(el =>({
-    orderNo : el.get('orderNo'),
-  })).filter(el => el.orderNo <= docId && el.orderNo >= todayTime 
-  ).length
-
-  console.log(orders)
-
-  setDoc(doc(db, "orders", String(docId)), {
-    orderNo : docId,
-    displayNo: orders + 1,
-    order: JSON.stringify(foods)
-  });
-
-  //  foods.forEach(async ({name,price,count}) =>{
-  //  await addDoc(collection(db,'orders'),{name,price,count})
-  //   })
-
+  setOrders(foods);
   return Response.json({ success: true });
 }
+
+export async function GET(req: NextRequest) {
+  const docId = process.env.TABLE_NO as string;
+  const docRef = doc(db, "orders", docId);
+  const list = await getDoc(docRef);
+  const data = list.exists() ? list.data().orders : [];
+  console.log(data);
+  return Response.json({ success: true, data });
+}
+
+const setOrders = (foods: Food[]) => {
+  const list: OrderList[] = foods.map(({ name, price, count }) => {
+    return { name, price, count };
+  });
+  const order = {
+    order: JSON.stringify(list),
+    date: new Date().getTime(),
+  };
+
+  const docId = process.env.TABLE_NO as string;
+  const docRef = doc(db, "orders", docId);
+  getDoc(docRef)
+    .then((docSnap) => {
+      if (docSnap.exists()) {
+        const data = docSnap.data() as Data;
+        setDoc(doc(db, "orders", docId), {
+          orders: [...data.orders, order],
+        });
+      } else {
+        setDoc(doc(db, "orders", docId), {
+          orders: [order],
+        });
+      }
+    })
+    .catch((error) => {
+      console.error("Error getting document: ", error);
+    });
+};

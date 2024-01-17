@@ -1,17 +1,19 @@
 "use client";
 
-import { foodApi } from "@/service/foodApi";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useCallback } from "react";
+import { useState, useCallback } from "react";
+import { foodApi } from "@/service/foodApi";
 import useSWR from "swr";
 import Cart from "./Components/Cart";
-
+import OrderList from "./Components/OrderList";
 export default function Home() {
   const { push } = useRouter();
   const { data: foods = [], isLoading } = useSWR("/api/foods", () =>
     foodApi.list()
   );
+  const [cartDisplay, setCartDisplay] = useState(false);
+  const [orderDisplay, setOrderDisplay] = useState(false);
 
   const handleFoodDetail = useCallback((id: string) => push(`/food/${id}`), []);
 
@@ -21,7 +23,30 @@ export default function Home() {
 
   return (
     <main>
-      <Cart />
+      <section className="w-full flex items-center justify-center p-4">
+        <article className="w-1/2 text-center">
+          <button
+            onClick={() => {
+              setCartDisplay(!cartDisplay);
+            }}
+            className="p-3 rounded-3xl bg-blue-600 text-white"
+          >
+            장바구니 {cartDisplay ? "닫기" : "보기"}
+          </button>
+          {cartDisplay && <Cart />}
+        </article>
+        <article className="w-1/2 text-center">
+          <button
+            onClick={() => {
+              setOrderDisplay(!orderDisplay);
+            }}
+            className="p-3 rounded-3xl bg-blue-600 text-white"
+          >
+            주문 내역 {orderDisplay ? "닫기" : "보기"}
+          </button>
+          {orderDisplay && <OrderList />}
+        </article>
+      </section>
       <section className="grid grid-cols-2 gap-[1rem] w-full p-[3rem]">
         {foods.map(({ id, src, name, price }) => (
           <article
@@ -43,7 +68,6 @@ export default function Home() {
           </article>
         ))}
       </section>
-      
     </main>
   );
 }
