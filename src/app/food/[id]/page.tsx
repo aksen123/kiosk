@@ -5,7 +5,6 @@ import useSWR from "swr";
 import Image from "next/image";
 import { useState } from "react";
 import { cartState } from "@/app/atoms/cart-atom";
-import { orderListState } from "@/app/atoms/orderList-atom";
 import { useRecoilState } from "recoil";
 import { Food } from "@/types/serivce";
 import { useRouter } from "next/navigation";
@@ -18,40 +17,36 @@ interface Props {
 
 export default function FoodPage({ params: { id } }: Props) {
   const { data, isLoading } = useSWR(`/api/food/${id}`, () => foodApi.get(id));
-  const [count, setCount] = useState(0)
-  const  [cartList, setCartList] = useRecoilState(cartState)
-  const [orderList, setOrderList] = useRecoilState(orderListState)
+  const [count, setCount] = useState(1);
+  const [cartList, setCartList] = useRecoilState(cartState);
 
-  const {push} = useRouter()
+  const { push } = useRouter();
 
-
-  const handleCount = (num : number) =>{
-    count + num < 0 ? false : setCount(count => count + num)
-  }
+  const handleCount = (num: number) => {
+    count + num < 1 ? false : setCount((count) => count + num);
+  };
   const order = () => {
-    const menu = {...data as Food, count: count}
-    if(count > 0) {
-      foodApi.order([menu]) 
-      setOrderList([...orderList,[menu]])
-      push('/')
+    const menu = { ...(data as Food), count: count };
+    if (count > 0) {
+      foodApi.order([menu]);
+      push("/");
     } else {
-      alert('수량을 선택해 주세요');
+      alert("수량을 선택해 주세요");
     }
-    
-  }
+  };
   const addCart = () => {
-    let arr = [...cartList]
+    let arr = [...cartList];
     let index = arr.findIndex((el) => el.name == data?.name);
-    if(index < 0) {
-      const item = {...data as Food, count: count}
-      setCartList([...arr,{...item}])
+    if (index < 0) {
+      const item = { ...(data as Food), count: count };
+      setCartList([...arr, { ...item }]);
     } else {
-      arr[index] = {...arr[index], count: arr[index].count + count}
-      setCartList(arr)
+      arr[index] = { ...arr[index], count: arr[index].count + count };
+      setCartList(arr);
     }
-    console.log(index)
-    push('/')
-  }
+    console.log(index);
+    push("/");
+  };
 
   if (isLoading) {
     return <div>데이터를 받아오는 중입니다.</div>;
@@ -70,13 +65,37 @@ export default function FoodPage({ params: { id } }: Props) {
         {data?.price.toLocaleString()}원
       </p>
       <div className="flex mt-8 border border-black ">
-        <button onClick={()=>{handleCount(1)}} className="border-r border-black w-8">+</button>
+        <button
+          onClick={() => {
+            handleCount(1);
+          }}
+          className="border-r border-black w-8"
+        >
+          +
+        </button>
         <span className="w-8 text-center">{count}</span>
-        <button onClick={()=>{handleCount(-1)}} className="border-l border-black w-8">-</button>
+        <button
+          onClick={() => {
+            handleCount(-1);
+          }}
+          className="border-l border-black w-8"
+        >
+          -
+        </button>
       </div>
       <div className="mt-4">
-        <button onClick={order} className="mr-2 p-3 bg-blue-600 rounded-3xl text-white">주문하기</button>
-        <button onClick={addCart} className="p-3 bg-blue-600 rounded-3xl text-white">장바구니 추가</button>
+        <button
+          onClick={order}
+          className="mr-2 p-3 bg-blue-600 rounded-3xl text-white"
+        >
+          주문하기
+        </button>
+        <button
+          onClick={addCart}
+          className="p-3 bg-blue-600 rounded-3xl text-white"
+        >
+          장바구니 추가
+        </button>
       </div>
     </div>
   );
