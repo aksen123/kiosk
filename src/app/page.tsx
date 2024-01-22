@@ -8,6 +8,7 @@ import useSWR from "swr";
 import Cart from "./Components/Cart";
 import OrderList from "./Components/OrderList";
 import Payment from "./Components/Payment";
+import Detail from "./Components/Detail";
 import { paymentState } from "./atoms/payment-atom";
 import { useRecoilState } from "recoil";
 export default function Home() {
@@ -25,53 +26,59 @@ export default function Home() {
   }
 
   return (
-    <main>
+    <>
       {displayPayment && <Payment />}
-      <section className="w-full flex items-center justify-center p-4">
-        <article className="w-1/2 text-center">
-          <button
-            onClick={() => {
-              setCartDisplay(!cartDisplay);
-            }}
-            className="p-3 rounded-3xl bg-blue-600 text-white"
-          >
-            장바구니 {cartDisplay ? "닫기" : "보기"}
-          </button>
-          {cartDisplay && <Cart />}
-        </article>
-        <article className="w-1/2 text-center">
-          <button
-            onClick={() => {
-              setOrderDisplay(!orderDisplay);
-            }}
-            className="p-3 rounded-3xl bg-blue-600 text-white"
-          >
-            주문 내역 {orderDisplay ? "닫기" : "보기"}
-          </button>
-          {orderDisplay && <OrderList />}
-        </article>
-      </section>
-      <section className="grid grid-cols-2 gap-[1rem] w-full p-[3rem]">
-        {foods.map(({ id, src, name, price }) => (
-          <article
-            className="cursor-pointer"
-            key={id}
-            onClick={() => handleFoodDetail(id)}
-          >
-            <Image
-              className="w-full h-[18.75rem] object-cover"
-              src={src}
-              alt={name}
-              width={100}
-              height={100}
-            />
-            <h1 className="text-xl font-bold">{name}</h1>
-            <p className="text-primary font-bold text-2xl">
-              {price.toLocaleString()}원
-            </p>
+      <main className="w-[1024px] h-[820px] flex my-auto">
+        <section className="grid grid-cols-4 place-content-center gap-[1rem] w-[80%]  p-[3rem]  items-center">
+          {foods.map(({ id, src, name, price }) => (
+            <article
+              className="cursor-pointer bg-gray-200 p-3 pb-0 h-48 self-start shadow-xl rounded-2xl"
+              key={id}
+              onClick={() => handleFoodDetail(id)}
+            >
+              <Image
+                className="w-full h-[70%] object-cover rounded-2xl"
+                src={src}
+                alt={name}
+                width={100}
+                height={100}
+              />
+              <div className="h-[20%] flex justify-between items-center">
+                <h1 className="text-sm font-bold">{name}</h1>
+                <p className="text-primary font-bold text-sm">
+                  {price.toLocaleString()}원
+                </p>
+              </div>
+            </article>
+          ))}
+        </section>
+        <section className="w-[30%] h-full py-[5rem] px-1 relative overflow-x-hidden before:absolute before:left-0 before:top-0 before:h-[100%] before:my-auto before:border-l-2 before:border-gray-300">
+          <article className="w-full text-center overflow-y-auto">
+            <div className="w-full flex justify-around mb-9">
+              <button
+                onClick={() => {
+                  setCartDisplay(!cartDisplay);
+                  orderDisplay ? setOrderDisplay(false) : false;
+                }}
+                className="p-3 rounded-3xl bg-blue-600 text-white"
+              >
+                장바구니
+              </button>
+              <button
+                onClick={() => {
+                  setOrderDisplay(!orderDisplay);
+                  cartDisplay ? setCartDisplay(false) : false;
+                }}
+                className="p-3 rounded-3xl bg-blue-600 text-white"
+              >
+                주문 내역
+              </button>
+            </div>
+            {cartDisplay && <Cart />}
+            {orderDisplay && <OrderList />}
           </article>
-        ))}
-      </section>
-    </main>
+        </section>
+      </main>
+    </>
   );
 }

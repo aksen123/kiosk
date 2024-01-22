@@ -13,8 +13,8 @@ export async function POST(req: NextRequest) {
   return Response.json({ success: true });
 }
 
-export async function GET(req: NextRequest) {
-  const docId = process.env.TABLE_NO as string;
+export async function GET() {
+  const docId = process.env.NEXT_PUBLIC_TABLE_NO as string;
   const docRef = doc(db, "orders", docId);
   const list = await getDoc(docRef);
   const data = list.exists() ? list.data().orders : [];
@@ -30,7 +30,7 @@ const setOrders = (foods: Food[]) => {
     date: new Date().getTime(),
   };
 
-  const docId = process.env.TABLE_NO as string;
+  const docId = process.env.NEXT_PUBLIC_TABLE_NO as string;
   const docRef = doc(db, "orders", docId);
   getDoc(docRef)
     .then((docSnap) => {

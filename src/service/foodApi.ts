@@ -14,7 +14,7 @@ export const foodApi = {
   orderList: (): Promise<Order[]> => {
     return api.get("/api/order");
   },
-  payment: () => {
-    return api.get("/api/payment");
+  payment: (tableNo: string, total: number) => {
+    return api.post("/api/payment", { tableNo, total });
   },
 };

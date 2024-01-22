@@ -15,21 +15,23 @@ const OrderList = () => {
   if (data && data.length > 0) {
     return (
       <div>
-        <h1 className="font-semibold text-2xl">주문 목록</h1>
+        <h1 className="font-semibold text-2xl mb-10">주문 목록</h1>
         {data.map(({ date, order }, i) => {
           const orders: OrderList[] = JSON.parse(order);
           return (
-            <div key={i} className=" border-b-2">
-              <h1 className="mb-2">
+            <div key={i} className="w-[90%] mx-auto py-2 border-b-2">
+              <h1 className="mb-2 font-bold text-lg">
                 {i + 1}번 주문 {new Date(date).toLocaleTimeString()}
               </h1>
               {orders.map((arr) => {
                 total += arr.price * arr.count;
                 return (
-                  <p key={i + "번"}>
-                    <span>{arr.name} </span>
+                  <p key={i + "번"} className="flex justify-between">
+                    <span className="block w-20 text-start">{arr.name} </span>
                     <span>{arr.count}개 </span>
-                    <span>{(arr.price * arr.count).toLocaleString()}원</span>
+                    <span className="text-blue-600 font-semibold">
+                      {(arr.price * arr.count).toLocaleString()}원
+                    </span>
                   </p>
                 );
               })}

@@ -2,15 +2,18 @@ import { getDoc, doc, setDoc, deleteDoc } from "firebase/firestore";
 import db from "@/service/firebase";
 import { NextRequest } from "next/server";
 
-export async function GET(req: NextRequest) {
-  const docId = process.env.TABLE_NO as string;
+export async function POST(req: NextRequest) {
+  const table = await req.json();
+  const docId = table.tableNo;
   const docRef = doc(db, "orders", docId);
   const list = await getDoc(docRef);
   const getTime = new Date().getTime();
-
+  console.log(list.data(), table);
   if (list.exists()) {
     const data = list.data();
     setDoc(doc(db, "payment", docId + `-${getTime}`), {
+      date: getTime,
+      totalPrice: table.total,
       ...data,
     });
     deleteDoc(docRef);
@@ -20,9 +23,3 @@ export async function GET(req: NextRequest) {
 
   return Response.json({ success: true });
 }
-
-const test = () => {
-  const docId = process.env.TABLE_NO as string;
-  const docRef = doc(db, "orders", docId);
-  getDoc(docRef).then((docSnap) => {});
-};
