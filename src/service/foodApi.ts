@@ -1,5 +1,4 @@
-import { Food } from "@/types/serivce";
-import { Order } from "@/app/api/order/route";
+import { Food, Order } from "@/types/serivce";
 import api from "./axios";
 
 export const foodApi = {
@@ -13,6 +12,9 @@ export const foodApi = {
     return api.post("/api/order", food);
   },
   orderList: (): Promise<Order[]> => {
-    return api.get("api/order");
+    return api.get("/api/order");
+  },
+  payment: (tableNo: string, total: number) => {
+    return api.post("/api/payment", { tableNo, total });
   },
 };

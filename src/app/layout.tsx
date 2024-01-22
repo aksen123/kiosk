@@ -17,7 +17,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko">
-      <body className={inter.className}>
+      <body className={"w-screen flex justify-center overflow-hidden"}>
         <RecoilWrapper>{children}</RecoilWrapper>
       </body>
     </html>

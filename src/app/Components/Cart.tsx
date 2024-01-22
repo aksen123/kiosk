@@ -25,16 +25,21 @@ const Cart = () => {
     let total = 0;
     return (
       <div>
-        <h1 className="font-semibold text-2xl">장바구니</h1>
+        <h1 className="font-semibold text-2xl mb-10">장바구니</h1>
         {cartList.map((menu, i) => {
           total += menu.count * menu.price;
           return (
             <div
               key={menu.number}
-              className="flex gap-3 items-center justify-center"
+              className="w-[90%] flex items-center justify-between px-2 pb-2 mx-auto border-b-2 border-b-gray-200"
             >
-              <span>{menu.name}</span>
-              <div className="flex gap-2 text-xl">
+              <div className="flex flex-col items-start">
+                <span>{menu.name}</span>
+                <span className="text-blue-600 font-semibold">
+                  {menu.price.toLocaleString()}원
+                </span>
+              </div>
+              <div className="flex gap-5 text-xl">
                 <button
                   onClick={() => {
                     handleCount(menu.count, i, 1);
