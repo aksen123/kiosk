@@ -38,14 +38,12 @@ const OrderList = () => {
             </div>
           );
         })}
-        <p className="text-xl font-medium mt-5">
-          총 {total.toLocaleString()}원
-        </p>
+        <p className="text-2xl font-bold mt-5">총 {total.toLocaleString()}원</p>
         <button
           onClick={() => {
             setDisplayPayment(true);
           }}
-          className="w-1/2 h-8 bg-emerald-200 rounded-full"
+          className="w-1/2 h-8 bg-emerald-200 rounded-full mt-3"
         >
           결제하기
         </button>

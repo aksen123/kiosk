@@ -66,15 +66,13 @@ const Cart = () => {
             </div>
           );
         })}
-        <p className="text-xl font-medium mt-2">
-          총 {total.toLocaleString()}원
-        </p>
+        <p className="text-xl font-bold mt-2">총 {total.toLocaleString()}원</p>
         <button
           onClick={() => {
             foodApi.order(cartList);
             setCartList([]);
           }}
-          className="w-1/2 h-8 bg-emerald-200 rounded-full"
+          className="w-1/2 h-8 bg-emerald-200 rounded-full mt-3"
         >
           주문하기
         </button>

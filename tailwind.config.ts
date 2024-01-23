@@ -16,6 +16,9 @@ const config: Config = {
       colors: {
         primary: "#426DD5",
       },
+      borderWidth: {
+        "48": "48px",
+      },
     },
   },
   plugins: [],
