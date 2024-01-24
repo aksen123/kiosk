@@ -7,11 +7,11 @@ import { foodApi } from "@/service/foodApi";
 import useSWR from "swr";
 import Cart from "./Components/Cart";
 import OrderList from "./Components/OrderList";
-import Payment from "./Components/Payment";
 import Detail from "./Components/Detail";
-import { paymentState } from "./atoms/payment-atom";
-import { useRecoilState } from "recoil";
 import { Food } from "@/types/serivce";
+import Modal from "./modal/Modal";
+import Loading from "./Components/Loading";
+
 export default function Home() {
   const { push } = useRouter();
   const { data: foods = [], isLoading } = useSWR("/api/foods", () =>
@@ -20,29 +20,30 @@ export default function Home() {
   const [cartDisplay, setCartDisplay] = useState(false);
   const [orderDisplay, setOrderDisplay] = useState(false);
   const [detail, setDetail] = useState<Food | null>(null);
-  const [displayPayment, setDisplayPayment] = useRecoilState(paymentState);
 
-  const closeDetail = () => {
-    setDetail(null);
+  const [detailModal, setDetailModal] = useState(false);
+
+  const openModal = (i: number) => {
+    setDetailModal(true);
+    setDetail(foods[i]);
+  };
+
+  const onClose = () => {
+    setDetailModal(false);
   };
 
   if (isLoading) {
-    return (
-      <div className="my-auto mx-auto text-4xl font-bold">
-        데이터를 받아오는 중입니다.
-      </div>
-    );
+    return <Loading />;
   }
 
   return (
     <>
-      {displayPayment && <Payment />}
-      <section className="grid grid-cols-4 place-content-center gap-[1rem] w-[80%] p-[3rem] items-center relative overflow-y-auto">
+      <section className="grid grid-cols-4 place-content-center gap-[1rem] w-[80%] p-[1rem] items-center relative overflow-y-auto">
         {foods.map(({ id, src, name, price }, i) => (
           <article
             className="cursor-pointer bg-gray-200 p-3 pb-0 h-full  self-start shadow-xl rounded-2xl"
             key={id}
-            onClick={() => setDetail(foods[i])}
+            onClick={() => openModal(i)}
           >
             <Image
               className="w-full h-[80%] object-cover rounded-2xl"
@@ -59,11 +60,13 @@ export default function Home() {
             </div>
           </article>
         ))}
-        {detail && <Detail close={closeDetail} food={detail} />}
+        <Modal open={detailModal} onClose={onClose}>
+          <Detail food={detail} close={onClose} />
+        </Modal>
       </section>
-      <section className="w-[30%] h-full py-[2rem] px-1 relative overflow-x-hidden border-l-2 border-gray-300">
-        <article className="w-full text-center overflow-y-auto">
-          <div className="w-full flex justify-around my-9">
+      <section className="w-[30%] h-full py-[1rem] px-1 relative overflow-x-hidden border-l-2 border-gray-300">
+        <article className="w-full text-center">
+          <div className="w-full flex justify-around my-5">
             <button
               onClick={() => {
                 setCartDisplay(!cartDisplay);

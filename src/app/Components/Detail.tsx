@@ -40,11 +40,7 @@ const Detail = ({ close, food }: Props) => {
   };
   return (
     <>
-      <div
-        className="absolute top-0 left-0 w-full h-full bg-black opacity-30 flex justify-center items-center"
-        onClick={close}
-      ></div>
-      <div className="absolute left-1/2 -translate-x-1/2 bg-white w-1/2 h-4/5 flex flex-col justify-center items-center z-20">
+      <div className="absolute left-1/2 -translate-x-1/2 bg-white w-full h-full flex flex-col justify-center items-center z-20">
         <Image
           className="w-1/2  object-cover"
           src={food?.src as string}
