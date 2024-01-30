@@ -18,7 +18,6 @@ export async function GET() {
   const docRef = doc(db, "orders", docId);
   const list = await getDoc(docRef);
   const data: Order[] = list.exists() ? list.data().orders : [];
-  console.log(data);
   return Response.json({ success: true, data });
 }
 

@@ -3,7 +3,10 @@ import React from "react";
 import { cartSelect } from "../atoms/cart-atom";
 import { useRecoilState } from "recoil";
 import { foodApi } from "@/service/foodApi";
-const Cart = () => {
+interface Props {
+  cb: (text?: string) => void;
+}
+const Cart = ({ cb }: Props) => {
   const [cartList, setCartList] = useRecoilState(cartSelect);
 
   const handleCount = (count: number, i: number, num: number) => {
@@ -21,6 +24,22 @@ const Cart = () => {
     setCartList(newArr);
   };
 
+  const handleOrder = () => {
+    const orderMenu =
+      cartList[0].name +
+      (cartList.length === 1
+        ? " " + cartList[0].count + "개"
+        : " 외 " + (cartList.length - 1) + "개");
+    yesNo("주문 하시겠습니까?", orderMenu, "주문하기", () =>
+      foodApi.order(cartList).then(() => {
+        alert("주문완료", () => {
+          cb("order");
+          setCartList([]);
+        });
+      })
+    );
+  };
+
   if (cartList.length > 0) {
     let total = 0;
     return (
@@ -33,7 +52,7 @@ const Cart = () => {
               key={menu.number}
               className="w-[90%] flex items-center justify-between px-2 pb-2 mx-auto border-b-2 border-b-gray-200"
             >
-              <div className="flex flex-col items-start">
+              <div className="w-20 flex flex-col items-start">
                 <span>{menu.name}</span>
                 <span className="text-blue-600 font-semibold">
                   {menu.price.toLocaleString()}원
@@ -68,10 +87,7 @@ const Cart = () => {
         })}
         <p className="text-xl font-bold mt-2">총 {total.toLocaleString()}원</p>
         <button
-          onClick={() => {
-            foodApi.order(cartList);
-            setCartList([]);
-          }}
+          onClick={handleOrder}
           className="w-1/2 h-8 bg-emerald-200 rounded-full mt-3"
         >
           주문하기

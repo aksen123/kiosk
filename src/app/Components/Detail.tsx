@@ -6,25 +6,27 @@ import { useState } from "react";
 import { cartState } from "@/app/atoms/cart-atom";
 import { useRecoilState } from "recoil";
 import { foodApi } from "@/service/foodApi";
+
 interface Props {
   food: Food | null;
-  close: () => void;
+  onClose: (text?: string) => void;
 }
 
-const Detail = ({ close, food }: Props) => {
+const Detail = ({ onClose, food }: Props) => {
   const [count, setCount] = useState(1);
   const [cartList, setCartList] = useRecoilState(cartState);
+
   const handleCount = (num: number) => {
     count + num < 1 ? false : setCount((count) => count + num);
   };
   const order = () => {
     const menu = { ...(food as Food), count: count };
-    if (count > 0) {
-      foodApi.order([menu]);
-      close();
-    } else {
-      alert("수량을 선택해 주세요");
-    }
+    const orderMenu = (food?.name as string) + count + "개";
+    yesNo("주문 하시겠습니까?", orderMenu, "주문하기", () =>
+      foodApi.order([menu]).then(() => {
+        alert("주문완료", () => onClose("order"));
+      })
+    );
   };
   const addCart = () => {
     let arr = [...cartList];
@@ -36,11 +38,16 @@ const Detail = ({ close, food }: Props) => {
       arr[index] = { ...arr[index], count: arr[index].count + count };
       setCartList(arr);
     }
-    close();
+    onClose("cart");
   };
   return (
     <>
-      <div className="absolute left-1/2 -translate-x-1/2 bg-white w-full h-full flex flex-col justify-center items-center z-20">
+      <div
+        onClick={(e: React.MouseEvent<HTMLDivElement>) => {
+          e.stopPropagation();
+        }}
+        className="bg-white w-1/2 h-4/5 flex flex-col justify-center items-center z-[1]"
+      >
         <Image
           className="w-1/2  object-cover"
           src={food?.src as string}

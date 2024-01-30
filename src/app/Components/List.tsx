@@ -10,7 +10,7 @@ const List = ({ data, callback }: ListProps) => {
   let total = 0;
   if (data && data.length > 0) {
     return (
-      <div className="w-full h-full py-[2rem] flex flex-col items-center justify-between gap-5">
+      <div className="w-full h-full py-[.5rem] flex flex-col items-center justify-between gap-5">
         <h1 className="font-semibold text-2xl">주문 목록</h1>
         <div className="overflow-y-auto w-full h-[300px]">
           {data.map(({ date, order }, i) => {

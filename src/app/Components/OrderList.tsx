@@ -7,17 +7,24 @@ import { paymentState } from "../atoms/payment-atom";
 import { useRecoilState } from "recoil";
 import Modal from "../modal/Modal";
 import List from "./List";
-
-const OrderList = () => {
+import { useEffect } from "react";
+interface Props {
+  cb: () => void;
+}
+const OrderList = ({ cb }: Props) => {
   const { data, isLoading } = useSWR("/api/order", () => foodApi.orderList());
   const [displayPayment, setDisplayPayment] = useRecoilState(paymentState);
   const handlePayment = (total?: number) => {
-    foodApi.payment(
-      process.env.NEXT_PUBLIC_TABLE_NO as string,
-      total as number
-    );
-    setDisplayPayment(false);
-    console.log("test");
+    yesNo("결제 하시겠습니까?", total + "원", "결제하기", () => {
+      foodApi
+        .payment(process.env.NEXT_PUBLIC_TABLE_NO as string, total as number)
+        .then(() =>
+          alert("결제완료", () => {
+            setDisplayPayment(false);
+            cb();
+          })
+        );
+    });
   };
   const openPayment = () => {
     setDisplayPayment(true);
@@ -32,60 +39,19 @@ const OrderList = () => {
         <>
           <List data={data} callback={openPayment} />
           <Modal open={displayPayment} onClose={() => setDisplayPayment(false)}>
-            <List data={data} callback={handlePayment} />
+            <div
+              onClick={(e: React.MouseEvent<HTMLDivElement>) => {
+                e.stopPropagation();
+              }}
+              className="bg-white w-1/2 h-4/5"
+            >
+              <List data={data} callback={handlePayment} />
+            </div>
           </Modal>
         </>
       )}
     </>
   );
-  // if (data && data.length > 0) {
-  //   return (
-  //     <div className="flex flex-col items-stretch justify-between gap-5">
-  //       <h1 className="font-semibold text-2xl">주문 목록</h1>
-  //       <div className="overflow-y-auto h-[300px]">
-  //         {data.map(({ date, order }, i) => {
-  //           const orders: OrderList[] = JSON.parse(order);
-  //           return (
-  //             <div key={i} className="w-[90%] mx-auto py-2 border-b-2">
-  //               <h1 className="mb-2 font-bold text-lg">
-  //                 {i + 1}번 주문 {new Date(date).toLocaleTimeString()}
-  //               </h1>
-  //               {orders.map((arr) => {
-  //                 total += arr.price * arr.count;
-  //                 return (
-  //                   <p key={i + "번"} className="flex justify-between">
-  //                     <span className="block w-20 text-start">{arr.name} </span>
-  //                     <span>{arr.count}개 </span>
-  //                     <span className="text-blue-600 font-semibold">
-  //                       {(arr.price * arr.count).toLocaleString()}원
-  //                     </span>
-  //                   </p>
-  //                 );
-  //               })}
-  //             </div>
-  //           );
-  //         })}
-  //       </div>
-  //       <div>
-  //         <p className="text-2xl font-bold mt-5">
-  //           총 {total.toLocaleString()}원
-  //         </p>
-  //         <button
-  //           onClick={() => {
-  //             setDisplayPayment(true);
-  //           }}
-  //           className="w-1/2 h-8 bg-emerald-200 rounded-full mt-3"
-  //         >
-  //           결제하기
-  //         </button>
-  //       </div>
-  //       <Modal open={displayPayment} onClose={() => setDisplayPayment(false)}>
-  //         <List data={data} callback={() => setDisplayPayment(false)} />
-  //       </Modal>
-  //     </div>
-  //   );
-  // }
-  // return <h1>주문 목록이 없습니다.</h1>;
 };
 
 export default OrderList;

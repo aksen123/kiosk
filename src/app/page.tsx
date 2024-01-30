@@ -11,9 +11,7 @@ import Detail from "./Components/Detail";
 import { Food } from "@/types/serivce";
 import Modal from "./modal/Modal";
 import Loading from "./Components/Loading";
-
 export default function Home() {
-  const { push } = useRouter();
   const { data: foods = [], isLoading } = useSWR("/api/foods", () =>
     foodApi.list()
   );
@@ -28,8 +26,15 @@ export default function Home() {
     setDetail(foods[i]);
   };
 
-  const onClose = () => {
+  const onClose = (text?: string) => {
     setDetailModal(false);
+    if (text == "cart") {
+      setCartDisplay(true);
+      orderDisplay ? setOrderDisplay(false) : false;
+    } else if (text == "order") {
+      setOrderDisplay(true);
+      cartDisplay ? setCartDisplay(false) : false;
+    }
   };
 
   if (isLoading) {
@@ -61,7 +66,7 @@ export default function Home() {
           </article>
         ))}
         <Modal open={detailModal} onClose={onClose}>
-          <Detail food={detail} close={onClose} />
+          <Detail food={detail} onClose={onClose} />
         </Modal>
       </section>
       <section className="w-[30%] h-full py-[1rem] px-1 relative overflow-x-hidden border-l-2 border-gray-300">
@@ -86,8 +91,9 @@ export default function Home() {
               주문 내역
             </button>
           </div>
-          {cartDisplay && <Cart />}
-          {orderDisplay && <OrderList />}
+
+          {cartDisplay && <Cart cb={onClose} />}
+          {orderDisplay && <OrderList cb={() => setOrderDisplay(false)} />}
         </article>
       </section>
     </>
