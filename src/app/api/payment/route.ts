@@ -8,7 +8,6 @@ export async function POST(req: NextRequest) {
   const docRef = doc(db, "orders", docId);
   const list = await getDoc(docRef);
   const getTime = new Date().getTime();
-  console.log(list.data(), table);
   if (list.exists()) {
     const data = list.data();
     setDoc(doc(db, "payment", docId + `-${getTime}`), {
@@ -17,8 +16,6 @@ export async function POST(req: NextRequest) {
       ...data,
     });
     deleteDoc(docRef);
-  } else {
-    console.log("else");
   }
 
   return Response.json({ success: true });

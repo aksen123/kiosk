@@ -17,7 +17,7 @@ export async function GET() {
   const docId = process.env.NEXT_PUBLIC_TABLE_NO as string;
   const docRef = doc(db, "orders", docId);
   const list = await getDoc(docRef);
-  const data = list.exists() ? list.data().orders : [];
+  const data: Order[] = list.exists() ? list.data().orders : [];
   return Response.json({ success: true, data });
 }
 
