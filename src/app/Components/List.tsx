@@ -30,9 +30,11 @@ const List = ({ data, callback }: ListProps) => {
                       key={i + "번"}
                       className="flex items-center justify-between"
                     >
-                      <span className="block w-20 text-start">{arr.name} </span>
-                      <span>{arr.count}개 </span>
-                      <span className="text-blue-600 font-semibold">
+                      <span className="block w-20 text-start flex-1">
+                        {arr.name}{" "}
+                      </span>
+                      <span className="flex-1">{arr.count}개 </span>
+                      <span className="text-blue-600 font-semibold flex-1 text-right">
                         {(arr.price * arr.count).toLocaleString()}원
                       </span>
                     </p>

@@ -52,7 +52,9 @@ export default function Home() {
           >
             <Image
               className="w-full h-[80%] object-cover rounded-2xl"
-              src={src}
+              src={
+                src ? src : "http://placehold.it/100/808080/ffffff&text=menu"
+              }
               alt={name}
               width={100}
               height={100}

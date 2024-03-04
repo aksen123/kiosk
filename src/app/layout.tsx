@@ -31,8 +31,6 @@ export default function RootLayout({
             {children}
             <GlobalComponent />
           </RecoilWrapper>
-          <div id="modal"></div>
-          <div id="alert"></div>
         </main>
       </body>
     </html>
