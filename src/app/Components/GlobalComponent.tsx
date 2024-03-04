@@ -48,7 +48,16 @@ const GlobalComponent = () => {
         setOpen(true);
       }, 100);
     };
+
+    const root = document.createElement("div");
+    root.setAttribute("id", "modal");
+    document.body.appendChild(root);
+
+    const root2 = document.createElement("div");
+    root2.setAttribute("id", "alert");
+    document.body.appendChild(root2);
   }, []);
+
   return (
     <Warning open={open}>
       {modal.type === CheckType.alert && (

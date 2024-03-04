@@ -50,7 +50,11 @@ const Detail = ({ onClose, food }: Props) => {
       >
         <Image
           className="w-1/2  object-cover"
-          src={food?.src as string}
+          src={
+            food?.src
+              ? food.src
+              : "http://placehold.it/100/808080/ffffff&text=menu"
+          }
           alt={food?.name as string}
           width={100}
           height={100}

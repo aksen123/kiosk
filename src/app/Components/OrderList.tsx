@@ -2,12 +2,10 @@
 
 import useSWR from "swr";
 import { foodApi } from "@/service/foodApi";
-// import { OrderList } from "@/types/serivce";
 import { paymentState } from "../atoms/payment-atom";
 import { useRecoilState } from "recoil";
 import Modal from "../modal/Modal";
 import List from "./List";
-import { useEffect } from "react";
 interface Props {
   cb: () => void;
 }
@@ -15,16 +13,21 @@ const OrderList = ({ cb }: Props) => {
   const { data, isLoading } = useSWR("/api/order", () => foodApi.orderList());
   const [displayPayment, setDisplayPayment] = useRecoilState(paymentState);
   const handlePayment = (total?: number) => {
-    yesNo("결제 하시겠습니까?", total + "원", "결제하기", () => {
-      foodApi
-        .payment(process.env.NEXT_PUBLIC_TABLE_NO as string, total as number)
-        .then(() =>
-          alert("결제완료", () => {
-            setDisplayPayment(false);
-            cb();
-          })
-        );
-    });
+    yesNo(
+      "결제 하시겠습니까?",
+      total?.toLocaleString() + "원",
+      "결제하기",
+      () => {
+        foodApi
+          .payment(process.env.NEXT_PUBLIC_TABLE_NO as string, total as number)
+          .then(() =>
+            alert("결제완료", () => {
+              setDisplayPayment(false);
+              cb();
+            })
+          );
+      }
+    );
   };
   const openPayment = () => {
     setDisplayPayment(true);

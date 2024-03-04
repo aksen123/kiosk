@@ -6,10 +6,10 @@ export async function GET() {
   const data = foodCollection.docs
     .map((doc) => ({
       id: doc.id,
-      number: doc.get("number"),
+      sort: doc.get("sort"),
       ...doc.data(),
     }))
-    .sort((a, b) => a.number - b.number);
+    .sort((a, b) => a.sort - b.sort);
 
   return Response.json({ success: true, data: data });
 }
