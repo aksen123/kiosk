@@ -51,7 +51,7 @@ const Cart = ({ onClose, store }: Props) => {
     let total = 0;
     return (
       <div className="flex flex-col items-center justify-between h-full">
-        <h1 className="font-semibold text-2xl mb-10">장바구니</h1>
+        {/* <h1 className="font-semibold text-2xl mb-10">장바구니</h1> */}
         <div className="w-full flex-1 overflow-y-auto">
           {cartList.map((menu, i) => {
             total += menu.count * menu.price;
@@ -94,7 +94,7 @@ const Cart = ({ onClose, store }: Props) => {
             );
           })}
         </div>
-        <div className="w-full border-t-2 border-t-blue-200  border-dotted">
+        <div className="w-full border-t-2 border-t-blue-200 border-dotted">
           <p className="text-xl font-bold mt-2">
             총 {total.toLocaleString()}원
           </p>
