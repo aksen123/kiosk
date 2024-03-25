@@ -48,14 +48,13 @@ const GlobalComponent = () => {
         setOpen(true);
       }, 100);
     };
-
+    const main = document.getElementById("main");
     const root = document.createElement("div");
     root.setAttribute("id", "modal");
-    document.body.appendChild(root);
-
+    main?.appendChild(root);
     const root2 = document.createElement("div");
     root2.setAttribute("id", "alert");
-    document.body.appendChild(root2);
+    main?.appendChild(root2);
   }, []);
 
   return (

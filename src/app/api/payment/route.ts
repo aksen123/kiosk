@@ -1,22 +1,27 @@
-import { getDoc, doc, setDoc, deleteDoc } from "firebase/firestore";
+import { getDoc, doc, setDoc, deleteDoc, collection } from "firebase/firestore";
 import db from "@/service/firebase";
 import { NextRequest } from "next/server";
+import { Food, OrderList } from "@/types/serivce";
+import dayjs from "dayjs";
+
+interface RequestData {
+  store: string;
+  total: number;
+  order: Food[];
+}
 
 export async function POST(req: NextRequest) {
-  const table = await req.json();
-  const docId = table.tableNo;
-  const docRef = doc(db, "orders", docId);
-  const list = await getDoc(docRef);
-  const getTime = new Date().getTime();
-  if (list.exists()) {
-    const data = list.data();
-    setDoc(doc(db, "payment", docId + `-${getTime}`), {
-      date: getTime,
-      totalPrice: table.total,
-      ...data,
-    });
-    deleteDoc(docRef);
-  }
+  const table: RequestData = await req.json();
+  const docId = table.store;
+  const order: OrderList[] = table.order.map(({ name, price, count }) => {
+    return { name, price, count };
+  });
+  const collectionDoc = collection(db, "stores", docId, "payment");
+  await setDoc(doc(collectionDoc, docId + "-" + dayjs().valueOf()), {
+    date: dayjs().valueOf(),
+    order: order,
+    total: table.total,
+  });
 
   return Response.json({ success: true });
 }

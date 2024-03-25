@@ -5,8 +5,8 @@ export const foodApi = {
   get: (id: string): Promise<Food> => {
     return api.get("/api/food", { params: { id } });
   },
-  list: (): Promise<Food[]> => {
-    return api.get("/api/foods");
+  list: (store: string): Promise<Food[]> => {
+    return api.get("/api/foods", { params: { store } });
   },
   order: (food: Food[]) => {
     return api.post("/api/order", food);
@@ -14,7 +14,7 @@ export const foodApi = {
   orderList: (): Promise<Order[]> => {
     return api.get("/api/order");
   },
-  payment: (tableNo: string, total: number) => {
-    return api.post("/api/payment", { tableNo, total });
+  payment: (store: string, total: number, order: Food[]) => {
+    return api.post("/api/payment", { store, total, order });
   },
 };
