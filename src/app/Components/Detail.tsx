@@ -8,32 +8,34 @@ import { useRecoilState } from "recoil";
 import { foodApi } from "@/service/foodApi";
 
 interface Props {
-  food: Food | null;
+  food: Food;
   onClose: (text?: string) => void;
+  store: string | null;
 }
 
-const Detail = ({ onClose, food }: Props) => {
+const Detail = ({ onClose, food, store }: Props) => {
   const [count, setCount] = useState(1);
   const [cartList, setCartList] = useRecoilState(cartState);
 
   const handleCount = (num: number) => {
     count + num < 1 ? false : setCount((count) => count + num);
   };
+  const callback = async (order: Food[]) => {
+    await foodApi.payment(store as string, food.price * count, order);
+    alert("주문 완료");
+    onClose();
+  };
   const order = () => {
-    const menu = { ...(food as Food), count: count };
-    const orderMenu = (food?.name as string) + count + "개";
-    yesNo("주문 하시겠습니까?", orderMenu, "주문하기", () =>
-      foodApi.order([menu]).then(() => {
-        alert("주문완료", () => onClose("order"));
-      })
-    );
+    const menu = { ...food, count: count };
+    const orderMenu = food.name + count + "개";
+    yesNo("주문 하시겠습니까?", orderMenu, "결제하기", () => callback([menu]));
   };
   const addCart = () => {
     let arr = [...cartList];
     let index = arr.findIndex((el) => el.name == food?.name);
     if (index < 0) {
-      const item = { ...(food as Food), count: count };
-      setCartList([...arr, { ...item }]);
+      const item = { ...food, count: count };
+      setCartList([...arr, item]);
     } else {
       arr[index] = { ...arr[index], count: arr[index].count + count };
       setCartList(arr);
@@ -49,7 +51,7 @@ const Detail = ({ onClose, food }: Props) => {
         className="bg-white w-1/2 h-4/5 flex flex-col justify-center items-center z-[1]"
       >
         <Image
-          className="w-1/2  object-cover"
+          className="w-1/2 object-cover rounded-md"
           src={
             food?.src
               ? food.src

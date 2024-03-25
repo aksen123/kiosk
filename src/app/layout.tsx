@@ -23,7 +23,10 @@ export default function RootLayout({
           "w-screen h-screen flex justify-center items-center overflow-hidden"
         }
       >
-        <main className="w-[70%] h-[80%] min-w-[1024px] min-h-[720px] relative flex border-48 border-[#3d3d3d] rounded-2xl">
+        <main
+          id="main"
+          className="w-[70%] h-[80%] min-w-[1024px] min-h-[720px] relative flex border-48 border-[#3d3d3d] rounded-2xl"
+        >
           <div className="absolute -top-[32px] left-1/2 -translate-x-1/2 w-4 h-4 bg-[#222] rounded-full flex justify-center items-center">
             <span className="w-2 h-2 bg-[#474747] rounded-full"></span>
           </div>

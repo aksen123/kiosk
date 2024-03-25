@@ -27,7 +27,7 @@ const List = ({ data, callback }: ListProps) => {
                   total += arr.price * arr.count;
                   return (
                     <p
-                      key={i + "번"}
+                      key={i + "번주문"}
                       className="flex items-center justify-between"
                     >
                       <span className="block w-20 text-start flex-1">

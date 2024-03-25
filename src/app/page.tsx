@@ -1,103 +1,42 @@
 "use client";
-
-import Image from "next/image";
+import { storeApi } from "@/service/store";
 import { useRouter } from "next/navigation";
-import { useState, useCallback } from "react";
-import { foodApi } from "@/service/foodApi";
-import useSWR from "swr";
-import Cart from "./Components/Cart";
-import OrderList from "./Components/OrderList";
-import Detail from "./Components/Detail";
-import { Food } from "@/types/serivce";
-import Modal from "./modal/Modal";
-import Loading from "./Components/Loading";
+import { useForm } from "react-hook-form";
+
+interface Form {
+  store: string;
+  password: string;
+}
 export default function Home() {
-  const { data: foods = [], isLoading } = useSWR("/api/foods", () =>
-    foodApi.list()
-  );
-  const [cartDisplay, setCartDisplay] = useState(false);
-  const [orderDisplay, setOrderDisplay] = useState(false);
-  const [detail, setDetail] = useState<Food | null>(null);
-
-  const [detailModal, setDetailModal] = useState(false);
-
-  const openModal = (i: number) => {
-    setDetailModal(true);
-    setDetail(foods[i]);
-  };
-
-  const onClose = (text?: string) => {
-    setDetailModal(false);
-    if (text == "cart") {
-      setCartDisplay(true);
-      orderDisplay ? setOrderDisplay(false) : false;
-    } else if (text == "order") {
-      setOrderDisplay(true);
-      cartDisplay ? setCartDisplay(false) : false;
+  const router = useRouter();
+  const { register, handleSubmit } = useForm<Form>();
+  const onSubmit = async (form: Form) => {
+    const store = await storeApi.get(form.store);
+    console.log(form, store);
+    if (store === undefined) {
+      alert("지점 없음");
+    } else {
+      sessionStorage.setItem("store", store.id);
+      router.push(`/kiosk?store=${store.id}`);
     }
+    // TODO :  store에 들어온 값이 db에 있는 매장이름 배열에 있으면 다음 페이지로 넘겨주고 atom 값을 store에 넣어주고 세션스토리지에 store : list.store 넣어주기
   };
-
-  if (isLoading) {
-    return <Loading />;
-  }
 
   return (
-    <>
-      <section className="grid grid-cols-4 place-content-center gap-[1rem] w-[80%] p-[1rem] items-center relative overflow-y-auto">
-        {foods.map(({ id, src, name, price }, i) => (
-          <article
-            className="cursor-pointer bg-gray-200 p-3 pb-0 h-full  self-start shadow-xl rounded-2xl"
-            key={id}
-            onClick={() => openModal(i)}
-          >
-            <Image
-              className="w-full h-[80%] object-cover rounded-2xl"
-              src={
-                src ? src : "http://placehold.it/100/808080/ffffff&text=menu"
-              }
-              alt={name}
-              width={100}
-              height={100}
-            />
-            <div className="h-[20%] flex justify-between items-center">
-              <h1 className="text-sm font-bold">{name}</h1>
-              <p className="text-primary font-bold text-sm">
-                {price.toLocaleString()}원
-              </p>
-            </div>
-          </article>
-        ))}
-        <Modal open={detailModal} onClose={onClose}>
-          <Detail food={detail} onClose={onClose} />
-        </Modal>
-      </section>
-      <section className="w-[30%] h-full py-[1rem] px-1 relative overflow-x-hidden border-l-2 border-gray-300">
-        <article className="w-full text-center">
-          <div className="w-full flex justify-around my-5">
-            <button
-              onClick={() => {
-                setCartDisplay(!cartDisplay);
-                orderDisplay ? setOrderDisplay(false) : false;
-              }}
-              className="p-3 rounded-3xl bg-blue-600 text-white"
-            >
-              장바구니
-            </button>
-            <button
-              onClick={() => {
-                setOrderDisplay(!orderDisplay);
-                cartDisplay ? setCartDisplay(false) : false;
-              }}
-              className="p-3 rounded-3xl bg-blue-600 text-white"
-            >
-              주문 내역
-            </button>
-          </div>
-
-          {cartDisplay && <Cart cb={onClose} />}
-          {orderDisplay && <OrderList cb={() => setOrderDisplay(false)} />}
-        </article>
-      </section>
-    </>
+    <section className="w-full h-full flex flex-col items-center justify-start py-32">
+      <h1 className="text-2xl font-bold mb-20">지점 명을 입력해 주세요</h1>
+      <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
+        <label>지점명</label>
+        <input
+          className="p-1 text-lg border-b-2 mb-4 outline-none placeholder:font-thin"
+          type="text"
+          placeholder="ex) 서울"
+          {...register("store")}
+        />
+        <button type="submit" className="bg-blue-600 text-white p-2 rounded-md">
+          확인
+        </button>
+      </form>
+    </section>
   );
 }
