@@ -10,6 +10,7 @@ import Detail from "../Components/Detail";
 import { Food } from "@/types/serivce";
 import Modal from "../modal/Modal";
 import Loading from "../Components/Loading";
+import SoldOut from "../Components/SoldOut";
 export default function Home() {
   const [store, setStore] = useState<string | null>(null);
   const { data: foods = [], isLoading } = useSWR(
@@ -48,11 +49,11 @@ export default function Home() {
   return (
     <>
       <section className="grid grid-cols-4 place-content-center gap-[1rem] w-[80%] p-[1rem] items-center relative overflow-y-auto">
-        {foods.map(({ id, src, name, price }, i) => (
+        {foods.map(({ id, src, name, price, soldOut }, i) => (
           <article
-            className="cursor-pointer bg-gray-200 p-3 pb-0 h-full  self-start shadow-xl rounded-2xl"
+            className="relative cursor-pointer bg-gray-200 p-3 pb-0 h-full  self-start shadow-xl rounded-2xl"
             key={id}
-            onClick={() => openModal(i)}
+            onClick={() => (soldOut ? false : openModal(i))}
           >
             <Image
               className="w-full h-[80%] object-cover rounded-2xl"
@@ -69,6 +70,7 @@ export default function Home() {
                 {price.toLocaleString()}원
               </p>
             </div>
+            {soldOut ? <SoldOut /> : null}
           </article>
         ))}
         <Modal open={detailModal} onClose={onClose}>
