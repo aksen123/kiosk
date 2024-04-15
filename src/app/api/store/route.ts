@@ -7,5 +7,7 @@ export async function GET(request: NextRequest) {
   const params = searchParams.get("store");
   const store = await getDoc(doc(db, "stores", params as string));
   const data = store.exists() ? { id: store.id, ...store.data() } : undefined;
+
+  console.log(data);
   return Response.json({ success: true, data });
 }

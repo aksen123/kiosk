@@ -17,10 +17,11 @@ export async function POST(req: NextRequest) {
     return { name, price, count };
   });
   const collectionDoc = collection(db, "stores", docId, "payment");
-  await setDoc(doc(collectionDoc, docId + "-" + dayjs().valueOf()), {
+  await setDoc(doc(db, "payments", docId + "-" + dayjs().valueOf()), {
     date: dayjs().valueOf(),
     order: order,
     total: table.total,
+    store: docId,
   });
 
   return Response.json({ success: true });

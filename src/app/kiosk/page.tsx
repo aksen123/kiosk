@@ -11,6 +11,7 @@ import { Food } from "@/types/serivce";
 import Modal from "../modal/Modal";
 import Loading from "../Components/Loading";
 import SoldOut from "../Components/SoldOut";
+
 export default function Home() {
   const [store, setStore] = useState<string | null>(null);
   const { data: foods = [], isLoading } = useSWR(
@@ -49,30 +50,32 @@ export default function Home() {
   return (
     <>
       <section className="grid grid-cols-4 place-content-center gap-[1rem] w-[80%] p-[1rem] items-center relative overflow-y-auto">
-        {foods.map(({ id, src, name, price, soldOut }, i) => (
-          <article
-            className="relative cursor-pointer bg-gray-200 p-3 pb-0 h-full  self-start shadow-xl rounded-2xl"
-            key={id}
-            onClick={() => (soldOut ? false : openModal(i))}
-          >
-            <Image
-              className="w-full h-[80%] object-cover rounded-2xl"
-              src={
-                src ? src : "http://placehold.it/100/808080/ffffff&text=menu"
-              }
-              alt={name}
-              width={100}
-              height={100}
-            />
-            <div className="h-[20%] flex justify-between items-center">
-              <h1 className="text-sm font-bold">{name}</h1>
-              <p className="text-primary font-bold text-sm">
-                {price.toLocaleString()}원
-              </p>
-            </div>
-            {soldOut ? <SoldOut /> : null}
-          </article>
-        ))}
+        {foods.map(({ id, src, name, price, soldOut, hide }, i) =>
+          hide ? null : (
+            <article
+              className="relative cursor-pointer bg-gray-200 p-3 pb-2 h-fit self-start shadow-xl rounded-2xl"
+              key={id}
+              onClick={() => (soldOut ? false : openModal(i))}
+            >
+              <Image
+                className="w-full h-[80%] object-cover rounded-2xl"
+                src={
+                  src ? src : "http://placehold.it/100/808080/ffffff&text=menu"
+                }
+                alt={name}
+                width={100}
+                height={100}
+              />
+              <div className="h-[20%] flex flex-col justify-between items-start mt-2">
+                <h1 className="text-sm font-bold">{name}</h1>
+                <p className="text-primary font-bold text-sm">
+                  {price.toLocaleString()}원
+                </p>
+              </div>
+              {soldOut ? <SoldOut /> : null}
+            </article>
+          )
+        )}
         <Modal open={detailModal} onClose={onClose}>
           <Detail food={detail as Food} onClose={onClose} store={store} />
         </Modal>

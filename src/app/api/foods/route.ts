@@ -1,4 +1,4 @@
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import db from "@/service/firebase";
 import { NextRequest } from "next/server";
 
@@ -6,7 +6,7 @@ export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
   const store = searchParams.get("store");
   const foodCollection = await getDocs(
-    collection(db, "stores", store as string, "menu")
+    query(collection(db, "menu"), where("store", "==", store as string))
   );
   const data = foodCollection.docs
     .map((doc) => ({

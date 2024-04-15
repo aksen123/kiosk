@@ -6,8 +6,8 @@ export interface Food {
   sort: number;
   count: number;
   soldOut: boolean;
+  hide: boolean;
 }
-
 export interface Order {
   date: number;
   order: string;
