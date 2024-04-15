@@ -16,15 +16,15 @@ export default function Home() {
     if (store === undefined) {
       alert("지점 없음");
     } else {
-      sessionStorage.setItem("store", store.id);
-      router.push(`/kiosk?store=${store.id}`);
+      sessionStorage.setItem("store", store.store);
+      router.push(`/kiosk?store=${store.store}`);
     }
     // TODO :  store에 들어온 값이 db에 있는 매장이름 배열에 있으면 다음 페이지로 넘겨주고 atom 값을 store에 넣어주고 세션스토리지에 store : list.store 넣어주기
   };
 
   return (
     <section className="w-full h-full flex flex-col items-center justify-start py-32">
-      <h1 className="text-2xl font-bold mb-20">지점 명을 입력해 주세요</h1>
+      <h1 className="text-2xl font-bold mb-20">지점 코드를 입력해 주세요</h1>
       <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
         <label>지점명</label>
         <input
