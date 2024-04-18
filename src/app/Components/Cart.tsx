@@ -42,8 +42,11 @@ const Cart = ({ onClose, store }: Props) => {
       (cartList.length === 1
         ? " " + cartList[0].count + "개"
         : " 외 " + (cartList.length - 1) + "개");
-    yesNo("주문 하시겠습니까?", orderMenu, "결제하기", () =>
-      callback(cartList)
+    yesNo(
+      "주문 하시겠습니까?",
+      orderMenu,
+      "결제하기",
+      async () => await callback(cartList)
     );
   };
 
