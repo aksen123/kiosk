@@ -4,6 +4,7 @@ import { cartSelect } from "../atoms/cart-atom";
 import { useRecoilState } from "recoil";
 import { foodApi } from "@/service/foodApi";
 import { Food } from "@/types/serivce";
+import { yesNo } from "@/service/util";
 interface Props {
   onClose: (text?: string) => void;
   store: string;
