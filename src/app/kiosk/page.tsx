@@ -43,9 +43,6 @@ export default function Home() {
   if (isLoading) {
     return <Loading />;
   }
-  // if (!store) {
-  //   return <div>로그인 해주세요</div>;
-  // }
 
   return (
     <>
