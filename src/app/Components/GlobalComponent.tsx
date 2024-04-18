@@ -15,6 +15,7 @@ const GlobalComponent = () => {
         cb && cb();
         setOpen(false);
       };
+      console.log("modal!!!");
       setTimeout(() => {
         setModal({
           ...modal,
@@ -32,6 +33,7 @@ const GlobalComponent = () => {
       yes?: string,
       cb?: () => void
     ) => {
+      console.log("yesNo!!!");
       const handle = () => {
         cb && cb();
         setOpen(false);
