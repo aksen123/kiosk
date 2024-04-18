@@ -50,12 +50,18 @@ const GlobalComponent = () => {
     };
     const main = document.getElementById("main");
     const root = document.createElement("div");
-    root.setAttribute("id", "modal");
-    main?.appendChild(root);
     const root2 = document.createElement("div");
-    root2.setAttribute("id", "alert");
-    main?.appendChild(root2);
-  }, []);
+    const modalCheck = document.getElementById("modal");
+    const alertCheck = document.getElementById("alert");
+    if (!modalCheck) {
+      root.setAttribute("id", "modal");
+      main?.appendChild(root);
+    }
+    if (!alertCheck) {
+      root2.setAttribute("id", "alert");
+      main?.appendChild(root2);
+    }
+  }, [modal, setModal]);
 
   return (
     <Warning open={open}>

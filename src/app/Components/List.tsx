@@ -1,5 +1,4 @@
 import { Order, OrderList } from "@/types/serivce";
-import { Data } from "../api/order/route";
 
 interface ListProps {
   data: Order[];

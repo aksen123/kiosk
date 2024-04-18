@@ -1,4 +1,5 @@
 "use client";
+import { useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 
 interface ModalProps {
@@ -8,7 +9,11 @@ interface ModalProps {
 }
 
 const Warning = ({ open, onClose, children }: ModalProps) => {
-  const root = document.querySelector("#alert");
+  const [root, setRoot] = useState<Element | null>(null);
+  useEffect(() => {
+    const root = document.querySelector("#modal");
+    setRoot(root);
+  }, []);
 
   if (!open) return null;
 
