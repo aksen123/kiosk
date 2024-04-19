@@ -1,6 +1,1 @@
-export function yesNo(
-  title: string,
-  message: string,
-  yes?: string,
-  callback?: () => void
-): void {}
+let myFunc = (str1: string): void => {};

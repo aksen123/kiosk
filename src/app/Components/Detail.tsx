@@ -28,7 +28,13 @@ const Detail = ({ onClose, food, store }: Props) => {
   const order = () => {
     const menu = { ...food, count: count };
     const orderMenu = food.name + count + "개";
-    yesNo("주문 하시겠습니까?", orderMenu, "결제하기", () => callback([menu]));
+    console.log("order button");
+    yesNo(
+      "주문 하시겠습니까?",
+      orderMenu,
+      "결제하기",
+      async () => await callback([menu])
+    );
   };
   const addCart = () => {
     let arr = [...cartList];
