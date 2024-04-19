@@ -13,12 +13,8 @@ export default function Home() {
 
   const onSubmit = async (form: Form) => {
     const store = await storeApi.get(form.store);
-    if (store === undefined) {
-      alert("지점 없음");
-    } else {
-      sessionStorage.setItem("store", store.store);
-      router.push(`/kiosk?store=${store.store}`);
-    }
+    sessionStorage.setItem("store", store.store);
+    router.push(`/kiosk?store=${store.store}`);
   };
 
   return (
