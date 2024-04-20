@@ -37,6 +37,8 @@ const Cart = ({ onClose, store }: Props) => {
   };
 
   const handleOrder = () => {
+    console.log("order button");
+
     const orderMenu =
       cartList[0].name +
       (cartList.length === 1
@@ -54,7 +56,6 @@ const Cart = ({ onClose, store }: Props) => {
     let total = 0;
     return (
       <div className="flex flex-col items-center justify-between h-full">
-        {/* <h1 className="font-semibold text-2xl mb-10">장바구니</h1> */}
         <div className="w-full flex-1 overflow-y-auto">
           {cartList.map((menu, i) => {
             total += menu.count * menu.price;
