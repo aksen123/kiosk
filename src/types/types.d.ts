@@ -1,6 +1,6 @@
 declare global {
   interface Window {
-    // alert(message: string, callback?: () => void);
+    alert(message: string, callback?: () => void);
     yesNo(
       title: string,
       message: string,
@@ -11,7 +11,7 @@ declare global {
   }
 }
 
-// declare function alert(message: string, callback?: () => void);
+declare function alert(message: string, callback?: () => void);
 declare function yesNo(
   title: string,
   message: string,
