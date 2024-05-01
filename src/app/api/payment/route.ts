@@ -16,12 +16,13 @@ export async function POST(req: NextRequest) {
   const order: OrderList[] = table.order.map(({ name, price, count }) => {
     return { name, price, count };
   });
-  const collectionDoc = collection(db, "stores", docId, "payment");
   await setDoc(doc(db, "payments", docId + "-" + dayjs().valueOf()), {
     date: dayjs().valueOf(),
     order: order,
     total: table.total,
     store: docId,
+    receipt: false,
+    complete: false,
   });
 
   return Response.json({ success: true });
