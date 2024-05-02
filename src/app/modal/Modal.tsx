@@ -13,7 +13,7 @@ const Modal = ({ open, onClose, children }: ModalProps) => {
   useEffect(() => {
     const root = document.querySelector("#modal");
     setRoot(root);
-  }, []);
+  }, [open]);
 
   if (!open) return null;
 
