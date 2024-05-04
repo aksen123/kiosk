@@ -77,20 +77,15 @@ export default function Home() {
           <Detail food={detail as Food} onClose={onClose} store={store} />
         </Modal>
       </section>
-      <section className="w-[30%] h-full py-[1rem] px-1 relative overflow-x-hidden border-l-2 border-gray-300 ">
+      <section className="w-[30%] h-full py-[1rem] px-1 relative overflow-x-hidden border-l-2 border-gray-300">
         <article className="w-full h-full text-center flex flex-col justify-start">
           <div className="w-full flex justify-around my-5">
-            <button
-              onClick={() => {
-                setCartDisplay(!cartDisplay);
-              }}
-              className="p-3 rounded-3xl bg-blue-600 text-white"
-            >
+            <h2 className="w-full pb-4 text-2xl border-b-[1px] border-b-gray-500">
               장바구니
-            </button>
+            </h2>
           </div>
 
-          {cartDisplay && <Cart onClose={onClose} store={store as string} />}
+          <Cart onClose={onClose} store={store as string} />
         </article>
       </section>
     </>

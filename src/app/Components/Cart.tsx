@@ -37,8 +37,6 @@ const Cart = ({ onClose, store }: Props) => {
   };
 
   const handleOrder = () => {
-    console.log("order button");
-
     const orderMenu =
       cartList[0].name +
       (cartList.length === 1
