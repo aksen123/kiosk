@@ -1,6 +1,5 @@
 import db from "@/service/firebase";
-import { error } from "console";
-import { collection, doc, getDoc, getDocs } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
@@ -9,7 +8,6 @@ export async function GET(request: NextRequest) {
   const store = await getDoc(doc(db, "stores", params as string));
 
   const data = store.exists() ? { id: store.id, ...store.data() } : undefined;
-  console.log(data);
   if (!data) {
     return Response.json(
       { success: false, error: { message: "해당 코드의 지점이 없습니다" } },
