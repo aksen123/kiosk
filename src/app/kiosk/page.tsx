@@ -11,6 +11,7 @@ import { Food } from "@/types/serivce";
 import Modal from "../modal/Modal";
 import Loading from "../Components/Loading";
 import SoldOut from "../Components/SoldOut";
+import Packaging from "../modal/Packaging";
 
 export default function Home() {
   const [store, setStore] = useState<string | null>(null);
@@ -74,7 +75,8 @@ export default function Home() {
           )
         )}
         <Modal open={detailModal} onClose={onClose}>
-          <Detail food={detail as Food} onClose={onClose} store={store} />
+          {/* <Detail food={detail as Food} onClose={onClose} store={store} /> */}
+          <Packaging />
         </Modal>
       </section>
       <section className="w-[30%] h-full py-[1rem] px-1 relative overflow-x-hidden border-l-2 border-gray-300">
