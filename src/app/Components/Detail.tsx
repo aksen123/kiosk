@@ -51,6 +51,7 @@ const Detail = ({ onClose, food, store }: Props) => {
       arr[index] = { ...arr[index], count: arr[index].count + count };
       setCartList(arr);
     }
+    onClose();
   };
   return (
     <>
