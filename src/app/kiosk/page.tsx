@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState, useCallback, useEffect } from "react";
 import { foodApi } from "@/service/foodApi";
 import useSWR from "swr";
@@ -33,11 +32,8 @@ export default function Home() {
     setStore(store);
   }, []);
 
-  const onClose = (text?: string) => {
+  const onClose = () => {
     setDetailModal(false);
-    if (text == "cart") {
-      setCartDisplay(true);
-    }
   };
 
   if (isLoading) {
@@ -85,7 +81,7 @@ export default function Home() {
             </h2>
           </div>
 
-          <Cart onClose={onClose} store={store as string} />
+          <Cart store={store as string} />
         </article>
       </section>
     </>

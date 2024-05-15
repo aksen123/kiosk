@@ -8,6 +8,7 @@ interface RequestData {
   store: string;
   total: number;
   order: Food[];
+  orderType: boolean;
 }
 
 export async function POST(req: NextRequest) {
@@ -23,6 +24,7 @@ export async function POST(req: NextRequest) {
     store: docId,
     receipt: false,
     complete: false,
+    orderType: table.orderType,
   });
 
   return Response.json({ success: true });

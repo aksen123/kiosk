@@ -9,7 +9,7 @@ import { foodApi } from "@/service/foodApi";
 
 interface Props {
   food: Food;
-  onClose: (text?: string) => void;
+  onClose: () => void;
   store: string | null;
 }
 
@@ -20,19 +20,25 @@ const Detail = ({ onClose, food, store }: Props) => {
   const handleCount = (num: number) => {
     count + num < 1 ? false : setCount((count) => count + num);
   };
-  const callback = async (order: Food[]) => {
-    await foodApi.payment(store as string, food.price * count, order);
+  const callback = async (order: Food[], bool: boolean) => {
+    const orderType = bool;
+    await foodApi.payment(
+      store as string,
+      food.price * count,
+      order,
+      orderType
+    );
     alert("주문 완료");
     onClose();
   };
-  const order = () => {
+  const order = (bool: boolean) => {
     const menu = { ...food, count: count };
-    const orderMenu = food.name + count + "개";
+    const orderMenu = food.name + " " + count + "개";
     yesNo(
       "주문 하시겠습니까?",
       orderMenu,
       "결제하기",
-      async () => await callback([menu])
+      async () => await callback([menu], bool)
     );
   };
   const addCart = () => {
@@ -45,7 +51,7 @@ const Detail = ({ onClose, food, store }: Props) => {
       arr[index] = { ...arr[index], count: arr[index].count + count };
       setCartList(arr);
     }
-    onClose("cart");
+    onClose();
   };
   return (
     <>
@@ -91,7 +97,7 @@ const Detail = ({ onClose, food, store }: Props) => {
         </div>
         <div className="mt-4">
           <button
-            onClick={order}
+            onClick={() => selectOrder(order)}
             className="mr-2 p-3 bg-blue-600 rounded-3xl text-white"
           >
             주문하기

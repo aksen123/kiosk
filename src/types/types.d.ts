@@ -18,4 +18,4 @@ declare function yesNo(
   yes?: string,
   callback?: () => void
 ): void;
-declare function testFunc(message: string, title: string): void;
+declare function selectOrder(callback1: (bool: boolean) => void): void;

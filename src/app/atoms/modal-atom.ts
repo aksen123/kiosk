@@ -3,6 +3,7 @@ import { atom } from "recoil";
 export enum CheckType {
   alert = "alert",
   yesNo = "yesNo",
+  select = "select",
 }
 
 export interface AtomType {
@@ -10,7 +11,7 @@ export interface AtomType {
   title: string;
   message: string;
   yes: string;
-  handleEvent?: () => void;
+  handleEvent?: (bool?: boolean) => void;
 }
 const modal: AtomType = {
   type: CheckType.alert,
