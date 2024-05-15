@@ -33,7 +33,7 @@ const Detail = ({ onClose, food, store }: Props) => {
   };
   const order = (bool: boolean) => {
     const menu = { ...food, count: count };
-    const orderMenu = food.name + count + "개";
+    const orderMenu = food.name + " " + count + "개";
     yesNo(
       "주문 하시겠습니까?",
       orderMenu,
