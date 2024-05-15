@@ -5,10 +5,9 @@ import { useRecoilState } from "recoil";
 import { foodApi } from "@/service/foodApi";
 import { Food } from "@/types/serivce";
 interface Props {
-  onClose: (text?: string) => void;
   store: string;
 }
-const Cart = ({ onClose, store }: Props) => {
+const Cart = ({ store }: Props) => {
   const [cartList, setCartList] = useRecoilState(cartSelect);
 
   const handleCount = (count: number, i: number, num: number) => {
@@ -25,18 +24,18 @@ const Cart = ({ onClose, store }: Props) => {
     newArr.splice(i, 1);
     setCartList(newArr);
   };
-  const callback = async (order: Food[]) => {
+  const callback = async (order: Food[], bool: boolean) => {
+    const orderType = bool;
     const total = order.reduce(
       (prev, curr) => prev + curr.count * curr.price,
       0
     );
-    await foodApi.payment(store as string, total, order);
+    await foodApi.payment(store as string, total, order, orderType);
     alert("주문 완료");
-    onClose();
     setCartList([]);
   };
 
-  const handleOrder = () => {
+  const handleOrder = (bool: boolean): void => {
     const orderMenu =
       cartList[0].name +
       (cartList.length === 1
@@ -46,7 +45,7 @@ const Cart = ({ onClose, store }: Props) => {
       "주문 하시겠습니까?",
       orderMenu,
       "결제하기",
-      async () => await callback(cartList)
+      async () => await callback(cartList, bool)
     );
   };
 
@@ -63,7 +62,7 @@ const Cart = ({ onClose, store }: Props) => {
                 className="w-[90%] flex items-center justify-between px-2 pb-2 mx-auto border-b-2 border-b-gray-200"
               >
                 <div className="w-20 flex flex-col items-start">
-                  <span>{menu.name}</span>
+                  <span className="text-left">{menu.name}</span>
                   <span className="text-blue-600 font-semibold">
                     {menu.price.toLocaleString()}원
                   </span>
@@ -101,7 +100,7 @@ const Cart = ({ onClose, store }: Props) => {
             총 {total.toLocaleString()}원
           </p>
           <button
-            onClick={handleOrder}
+            onClick={() => selectOrder(handleOrder)}
             className="w-1/2 h-8 bg-emerald-200 rounded-full mt-3"
           >
             주문하기

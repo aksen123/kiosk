@@ -6,6 +6,7 @@ import Confirm from "../modal/Confirm";
 import Warning from "../modal/Warning";
 import { CheckType, modalState } from "../atoms/modal-atom";
 import { useRecoilState } from "recoil";
+import OrderType from "../modal/OrderType";
 const GlobalComponent = () => {
   const [modal, setModal] = useRecoilState(modalState);
   const [open, setOpen] = useState(false);
@@ -48,6 +49,19 @@ const GlobalComponent = () => {
         setOpen(true);
       }, 100);
     };
+    window.selectOrder = (callback: (bool: boolean) => void) => {
+      const handle = (bool?: boolean) => {
+        typeof bool === "boolean" && callback(bool);
+      };
+      setTimeout(() => {
+        setModal({
+          ...modal,
+          type: CheckType.select,
+          handleEvent: handle,
+        });
+        setOpen(true);
+      }, 100);
+    };
     const main = document.getElementById("main");
     const root = document.createElement("div");
     const root2 = document.createElement("div");
@@ -75,6 +89,12 @@ const GlobalComponent = () => {
           yes={modal.yes}
           cb1={modal.handleEvent}
           cb2={() => setOpen(false)}
+        />
+      )}
+      {modal.type === CheckType.select && (
+        <OrderType
+          callback1={modal.handleEvent as (bool?: boolean) => void}
+          callback2={() => setOpen(false)}
         />
       )}
     </Warning>

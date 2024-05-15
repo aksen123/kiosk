@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState, useCallback, useEffect } from "react";
 import { foodApi } from "@/service/foodApi";
 import useSWR from "swr";
@@ -11,7 +10,6 @@ import { Food } from "@/types/serivce";
 import Modal from "../modal/Modal";
 import Loading from "../Components/Loading";
 import SoldOut from "../Components/SoldOut";
-import Packaging from "../modal/Packaging";
 
 export default function Home() {
   const [store, setStore] = useState<string | null>(null);
@@ -34,11 +32,8 @@ export default function Home() {
     setStore(store);
   }, []);
 
-  const onClose = (text?: string) => {
+  const onClose = () => {
     setDetailModal(false);
-    if (text == "cart") {
-      setCartDisplay(true);
-    }
   };
 
   if (isLoading) {
@@ -75,8 +70,7 @@ export default function Home() {
           )
         )}
         <Modal open={detailModal} onClose={onClose}>
-          {/* <Detail food={detail as Food} onClose={onClose} store={store} /> */}
-          <Packaging />
+          <Detail food={detail as Food} onClose={onClose} store={store} />
         </Modal>
       </section>
       <section className="w-[30%] h-full py-[1rem] px-1 relative overflow-x-hidden border-l-2 border-gray-300">
@@ -87,7 +81,7 @@ export default function Home() {
             </h2>
           </div>
 
-          <Cart onClose={onClose} store={store as string} />
+          <Cart store={store as string} />
         </article>
       </section>
     </>
