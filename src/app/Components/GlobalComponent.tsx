@@ -49,6 +49,7 @@ const GlobalComponent = () => {
         setOpen(true);
       }, 100);
     };
+
     window.selectOrder = (callback: (bool: boolean) => void) => {
       const handle = (bool?: boolean) => {
         typeof bool === "boolean" && callback(bool);

@@ -14,6 +14,7 @@ export default function Home() {
   const onSubmit = async (form: Form) => {
     const store = await storeApi.get(form.store);
     sessionStorage.setItem("store", store.store);
+    sessionStorage.setItem("name", store.name);
     router.push(`/kiosk?store=${store.store}`);
   };
 
