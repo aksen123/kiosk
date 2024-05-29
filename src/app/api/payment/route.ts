@@ -1,4 +1,11 @@
-import { getDoc, doc, setDoc, deleteDoc, collection } from "firebase/firestore";
+import {
+  doc,
+  setDoc,
+  collection,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 import db from "@/service/firebase";
 import { NextRequest } from "next/server";
 import { Food, OrderList } from "@/types/serivce";
@@ -17,6 +24,15 @@ export async function POST(req: NextRequest) {
   const order: OrderList[] = table.order.map(({ name, price, count }) => {
     return { name, price, count };
   });
+  const today = dayjs();
+  const paymentsQuery = query(
+    collection(db, "payments"),
+    where("date", ">=", today.startOf("day").valueOf()),
+    where("date", "<=", today.endOf("day").valueOf()),
+    where("store", "==", docId)
+  );
+  const payments = (await getDocs(paymentsQuery)).docs.map((el, i) => i);
+  const orderNumber = payments.length + 1;
   await setDoc(doc(db, "payments", docId + "-" + dayjs().valueOf()), {
     date: dayjs().valueOf(),
     order: order,
@@ -25,7 +41,8 @@ export async function POST(req: NextRequest) {
     receipt: false,
     complete: false,
     orderType: table.orderType,
+    orderNumber,
   });
 
-  return Response.json({ success: true });
+  return Response.json({ success: true, data: orderNumber });
 }

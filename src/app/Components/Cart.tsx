@@ -30,8 +30,13 @@ const Cart = ({ store }: Props) => {
       (prev, curr) => prev + curr.count * curr.price,
       0
     );
-    await foodApi.payment(store as string, total, order, orderType);
-    alert("주문 완료");
+    const orderNumber = await foodApi.payment(
+      store as string,
+      total,
+      order,
+      orderType
+    );
+    alert(`주문 완료! 주문번호는 ${orderNumber}번 입니다.`);
     setCartList([]);
   };
 

@@ -22,13 +22,13 @@ const Detail = ({ onClose, food, store }: Props) => {
   };
   const callback = async (order: Food[], bool: boolean) => {
     const orderType = bool;
-    await foodApi.payment(
+    const orderNumber = await foodApi.payment(
       store as string,
       food.price * count,
       order,
       orderType
     );
-    alert("주문 완료");
+    alert(`주문 완료! 주문번호는 ${orderNumber}번 입니다.`);
     onClose();
   };
   const order = (bool: boolean) => {
