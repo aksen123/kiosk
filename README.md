@@ -54,7 +54,51 @@
 ## 🗂️ 프로젝트 구조
 <details>
   
-  ```
+```
+📦src
+ ┣ 📂app
+ ┃ ┣ 📂api
+ ┃ ┃ ┣ 📂food
+ ┃ ┃ ┃ ┗ 📜route.ts
+ ┃ ┃ ┣ 📂foods
+ ┃ ┃ ┃ ┗ 📜route.ts
+ ┃ ┃ ┣ 📂payment
+ ┃ ┃ ┃ ┗ 📜route.ts
+ ┃ ┃ ┗ 📂store
+ ┃ ┃ ┃ ┗ 📜route.ts
+ ┃ ┣ 📂atoms
+ ┃ ┃ ┣ 📜cart-atom.ts
+ ┃ ┃ ┣ 📜modal-atom.ts
+ ┃ ┃ ┗ 📜payment-atom.ts
+ ┃ ┣ 📂Components
+ ┃ ┃ ┣ 📜Cart.tsx
+ ┃ ┃ ┣ 📜Detail.tsx
+ ┃ ┃ ┣ 📜GlobalComponent.tsx
+ ┃ ┃ ┣ 📜List.tsx
+ ┃ ┃ ┣ 📜Loading.tsx
+ ┃ ┃ ┗ 📜SoldOut.tsx
+ ┃ ┣ 📂kiosk
+ ┃ ┃ ┗ 📜page.tsx
+ ┃ ┣ 📂modal
+ ┃ ┃ ┣ 📜Alert.tsx
+ ┃ ┃ ┣ 📜Confirm.tsx
+ ┃ ┃ ┣ 📜Modal.tsx
+ ┃ ┃ ┣ 📜OrderType.tsx
+ ┃ ┃ ┗ 📜Warning.tsx
+ ┃ ┣ 📜favicon.ico
+ ┃ ┣ 📜globals.css
+ ┃ ┣ 📜layout.tsx
+ ┃ ┣ 📜page.tsx
+ ┃ ┗ 📜RecoilWrapper.tsx
+ ┣ 📂service
+ ┃ ┣ 📜axios.ts
+ ┃ ┣ 📜firebase.ts
+ ┃ ┣ 📜foodApi.ts
+ ┃ ┣ 📜store.ts
+ ┃ ┗ 📜util.ts
+ ┗ 📂types
+ ┃ ┣ 📜serivce.ts
+ ┃ ┗ 📜types.d.ts
 ```
 </details>
 
