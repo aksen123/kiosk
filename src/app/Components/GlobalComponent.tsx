@@ -11,20 +11,43 @@ const GlobalComponent = () => {
   const [modal, setModal] = useRecoilState(modalState);
   const [open, setOpen] = useState(false);
   useEffect(() => {
-    window.alert = (message: string, cb?: () => void) => {
-      const handle = () => {
-        cb && cb();
-        setOpen(false);
-      };
-      setTimeout(() => {
-        setModal({
-          ...modal,
-          type: CheckType.alert,
-          title: message,
-          handleEvent: handle,
-        });
-        setOpen(true);
-      }, 100);
+    window.alert = (
+      message1: string,
+      message2?: string | (() => void),
+      cb?: () => void
+    ) => {
+      if (typeof message2 === "string") {
+        const handle = () => {
+          cb && cb();
+          setOpen(false);
+        };
+        setTimeout(() => {
+          setModal({
+            ...modal,
+            type: CheckType.alert,
+            title: message1,
+            message: message2,
+            handleEvent: handle,
+          });
+          setOpen(true);
+        }, 100);
+      }
+      if (typeof message2 === "function") {
+        const handle = () => {
+          message2();
+          setOpen(false);
+        };
+        setTimeout(() => {
+          setModal({
+            ...modal,
+            type: CheckType.alert,
+            title: message1,
+            message: "",
+            handleEvent: handle,
+          });
+          setOpen(true);
+        }, 100);
+      }
     };
 
     window.yesNo = (
@@ -81,7 +104,11 @@ const GlobalComponent = () => {
   return (
     <Warning open={open}>
       {modal.type === CheckType.alert && (
-        <Alert message={modal.title} callback={modal.handleEvent} />
+        <Alert
+          title={modal.title}
+          message={modal.message}
+          callback={modal.handleEvent}
+        />
       )}
       {modal.type === CheckType.yesNo && (
         <Confirm
