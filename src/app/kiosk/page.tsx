@@ -61,7 +61,7 @@ export default function Home() {
                 onClick={() => (soldOut ? false : openModal(i))}
               >
                 <Image
-                  className="w-full h-[80%] object-cover rounded-2xl"
+                  className="w-full h-[80%] object-cover rounded-2xl bg-white"
                   src={
                     src
                       ? src

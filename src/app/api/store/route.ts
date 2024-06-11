@@ -1,11 +1,13 @@
 import db from "@/service/firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs } from "firebase/firestore";
 import { NextRequest } from "next/server";
 
-export async function GET(request: NextRequest) {
-  const { searchParams } = request.nextUrl;
-  const params = searchParams.get("store");
-  const store = await getDoc(doc(db, "stores", params as string));
+export async function POST(request: NextRequest) {
+  // const { searchParams } = request.nextUrl;
+  // const params = searchParams.get("store");
+  const code: { store: string } = await request.json();
+
+  const store = await getDoc(doc(db, "stores", code.store as string));
 
   const data = store.exists() ? { id: store.id, ...store.data() } : undefined;
   if (!data) {
@@ -16,4 +18,13 @@ export async function GET(request: NextRequest) {
   } else {
     return Response.json({ success: true, data });
   }
+}
+
+export async function GET() {
+  const getStores = await getDocs(collection(db, "stores"));
+  const data = getStores.docs.map((store) => {
+    return { code: store.get("store"), name: store.get("name") };
+  });
+
+  return Response.json({ success: true, data });
 }
